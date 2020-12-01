@@ -15,7 +15,7 @@ int main() {
     for(int i = 0; i < int(nums.size()); ++i) {
         int have = nums[i];
         int need = 2020 - have;
-        if(binary_search(nums.begin(), nums.end(), need)) {
+        if(binary_search(nums.begin(), nums.begin() + i, need) || binary_search(nums.begin() + i + 1, nums.end(), need)) {
             cout << have * need << endl;
             return 0;
         }
