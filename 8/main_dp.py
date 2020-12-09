@@ -1,3 +1,6 @@
+import sys
+sys.setrecursionlimit(1000000)
+
 program = [
     (x[0], int(x[1]))
     for x in 
