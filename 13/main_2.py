@@ -1,3 +1,4 @@
+from random import shuffle
 min_t = int(input())
 bus_schedule = list(reversed([(i, int(x)) for (i, x) in enumerate(input().split(',')) if x != 'x']))
 indices, timestamps = map(list, zip(*bus_schedule))
@@ -10,10 +11,14 @@ for i in range(min_t, min_t + max(timestamps) + 1):
 # Part 2
 # pos = 1 para evitar dar el 0 por bueno
 pos, leap = 1, 1
+total_it = 0
 while indices:
   t, k = timestamps.pop(), indices.pop()
   while (pos % t) != ((t - k) % t):
     pos += leap
+    total_it += 1
   leap *= t
+  shuffle(indices)
 
 print(pos)
+print(total_it)
