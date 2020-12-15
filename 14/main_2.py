@@ -47,4 +47,7 @@ with open(sys.argv[1]) as f:
       write_mem(addr_mask, 0, 0, num)
       line = f.readline().strip()
 
+print(mem)
+
+print(len(mem.keys()))
 print(sum(mem.values()))
