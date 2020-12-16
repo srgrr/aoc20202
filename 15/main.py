@@ -18,6 +18,9 @@ def main(until):
     if len(turns[new_num]) > 2:
       turns[new_num] = turns[new_num][-2:]
     last_num = new_num
+    nums.append(last_num)
+
+  print(nums)
 
   print(last_num)
 
