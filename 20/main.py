@@ -2,6 +2,7 @@ import sys
 import re
 from itertools import combinations, product
 from copy import deepcopy
+from random import shuffle
 
 class Tile:
 
@@ -97,7 +98,7 @@ def grid_without_borders(g):
   return [''.join(x for x in g[i][1:len(g[0]) - 1]) for i in range(1, len(g) - 1)]
 
 
-
+# Parse input
 tiles = []
 
 with open(sys.argv[1]) as f:
@@ -112,7 +113,9 @@ with open(sys.argv[1]) as f:
     line = f.readline().strip()
     tiles.append(Tile(tile_id, grid))
 
+shuffle(tiles)
 
+# Part 1
 for t0_transf, t0_rot in product(range(4), repeat=2):
   tiles_c = deepcopy(tiles)
   transform(tiles_c[0], t0_transf)
@@ -154,36 +157,38 @@ for t0_transf, t0_rot in product(range(4), repeat=2):
     bottom_left = [x for x in fixed if x.ab is None and x.al is None][0]
     bottom_right = [x for x in fixed if x.ab is None and x.ar is None][0]
     print(top_left.id * top_right.id * bottom_left.id * bottom_right.id)
-    current_node = top_left
-    first_in_row = top_left
-    current_row = []
-    mega_grid = []
-    while current_node is not None:
-      current_row.append(grid_without_borders(current_node.grid))
-      if current_node.ar is not None:
-        current_node = current_node.ar
-      else:
-        for row in range(len(current_row[0])):
-          mega_row = ''.join(g[row] for g in current_row)
-          mega_grid.append(mega_row)
-        current_node, first_in_row = first_in_row.ab, first_in_row.ab
-        current_row = []
-
-    pattern = ["                  # ", "#    ##    ##    ###", " #  #  #  #  #  #   "]
-
-    for transf, rot in product(range(4), repeat=2):
-      mega_tile = Tile(0xDEADBEEF, deepcopy(mega_grid))
-      transform(mega_tile, transf)
-      rotate(mega_tile, rot)
-      ans = sum(x.count('#') for x in mega_tile.grid)
-      inc = 0
-      for i in range(0, len(mega_tile.grid) - len(pattern)):
-        for j in range(0, len(mega_tile.grid[0]) - len(pattern[0])):
-          all_match = True
-          for ii, jj in product(range(len(pattern)), range(len(pattern[0]))):
-            all_match = all_match and (pattern[ii][jj] != '#' or mega_tile.grid[i + ii][j + jj] == '#')
-          if all_match:
-            inc += sum(x.count('#') for x in pattern)
-      if inc:
-        print(ans - inc)
     break
+
+# Part 2
+current_node = top_left
+first_in_row = top_left
+current_row = []
+mega_grid = []
+while current_node is not None:
+  current_row.append(grid_without_borders(current_node.grid))
+  if current_node.ar is not None:
+    current_node = current_node.ar
+  else:
+    for row in range(len(current_row[0])):
+      mega_row = ''.join(g[row] for g in current_row)
+      mega_grid.append(mega_row)
+    current_node, first_in_row = first_in_row.ab, first_in_row.ab
+    current_row = []
+
+pattern = ["                  # ", "#    ##    ##    ###", " #  #  #  #  #  #   "]
+
+for transf, rot in product(range(4), repeat=2):
+  mega_tile = Tile(0xDEADBEEF, deepcopy(mega_grid))
+  transform(mega_tile, transf)
+  rotate(mega_tile, rot)
+  ans = sum(x.count('#') for x in mega_tile.grid)
+  inc = 0
+  for i in range(0, len(mega_tile.grid) - len(pattern)):
+    for j in range(0, len(mega_tile.grid[0]) - len(pattern[0])):
+      all_match = True
+      for ii, jj in product(range(len(pattern)), range(len(pattern[0]))):
+        all_match = all_match and (pattern[ii][jj] != '#' or mega_tile.grid[i + ii][j + jj] == '#')
+      if all_match:
+        inc += sum(x.count('#') for x in pattern)
+  if inc:
+    print(ans - inc)
