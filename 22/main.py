@@ -37,7 +37,6 @@ p1_decks = [x.copy() for x in decks]
 
 while all(p1_decks):
   t1, t2 = top_cards(p1_decks)
-  to_append = p1_decks[0] if t1 > t2 else p1_decks[1]
   win(p1_decks, t1 <= t2, t1, t2)
 
 print_winner(p1_decks)
@@ -46,14 +45,15 @@ print_winner(p1_decks)
 def game(decks):
   mem = set()
   while all(decks):
-    current_state = str((tuple(decks[0]), tuple(decks[1])))
+    current_state = (tuple(decks[0]), tuple(decks[1]))
     t1, t2 = top_cards(decks)
     if current_state in mem:
       win(decks, 0, t1, t2)
       return 0
     mem.add(current_state)
-    if t1 <= len(decks[0]) and t2 <= len(decks[1]):
-      win(decks, game([deque(list(x)[:t]) for x, t in zip(decks, [t1, t2])]), t1, t2)
+    dqt = list(zip(decks, [t1, t2]))
+    if all(t <= len(dq) for dq, t in dqt):
+      win(decks, game([deque(list(dq)[:t]) for dq, t in dqt]), t1, t2)
     else:
       win(decks, t1 <= t2, t1, t2)
   return 0 if decks[0] else 1
