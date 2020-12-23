@@ -79,6 +79,6 @@ for _ in range(10 if sys.argv[2] == '1' else 10000000):
 if sys.argv[2] == '1':
   print_ring(start_point, len(nodes))
 
-node_with_1 = [x for x in nodes if x.value == 1][0]
+node_with_1 = nodes[nodes_with_val[1]]
 
 print(node_with_1.next_in_list.value * node_with_1.next_in_list.next_in_list.value)
