@@ -1,9 +1,6 @@
 g = [x[:-1] for x in open('input.txt').readlines()]
 
-c = 0
-r = 0
-
-cnt = 0
+c, r, cnt = 0, 0, 0
 
 while r < len(g):
     cnt += g[r][c] == '#'
